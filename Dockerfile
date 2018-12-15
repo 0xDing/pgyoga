@@ -70,7 +70,7 @@ RUN set -ex; \
     libxslt1-dev \
     libipc-run-perl \
     libldap2-dev \
-    uuid-dev \
+    libossp-uuid-dev \
     gcc \
 
 	&& wget -O postgresql.tar.bz2 "https://ftp.postgresql.org/pub/source/v$PG_VERSION/postgresql-$PG_VERSION.tar.bz2" \
