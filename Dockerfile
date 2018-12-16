@@ -51,11 +51,17 @@ RUN set -eux; \
 
 RUN mkdir /docker-entrypoint-initdb.d
 
+ENV CC clang-6.0
+ENV CPP clang-cpp-6.0
+ENV CXX clang++-6.0
+ENV CFLAGS -O2 -fstrict-enums
+
 RUN set -ex; \
     apt-get install -y \
     pkg-config \
     llvm-6.0 \
     clang-6.0 \
+    clang++-6.0 \
     libicu-dev \
     libreadline-dev \
     zlib1g-dev \
@@ -65,7 +71,6 @@ RUN set -ex; \
     libipc-run-perl \
     libldap2-dev \
     libossp-uuid-dev \
-    gcc \
 
 	&& wget -O postgresql.tar.bz2 "https://ftp.postgresql.org/pub/source/v$PG_VERSION/postgresql-$PG_VERSION.tar.bz2" \
     	&& echo "$PG_SHA256 *postgresql.tar.bz2" | sha256sum -c - \
