@@ -95,7 +95,7 @@ RUN set -ex; \
     # https://anonscm.debian.org/cgit/pkg-postgresql/postgresql.git/tree/debian/rules?h=9.5
     	&& ./configure \
     		--build="$gnuArch" \
-    		--with-extra-version="pgyoga-$PGYOGA_VERSION" \
+    		--with-extra-version="(pgYoga $PGYOGA_VERSION)" \
     		--with-llvm \
     		--with-segsize=4 \
     # https://github.com/greenplum-db/gpdb/blob/bd9ddf388d15f57fef948b4a7d1ce374e0e67e64/configure.in
@@ -115,7 +115,7 @@ RUN set -ex; \
     		--with-system-tzdata=/usr/share/zoneinfo \
     		--prefix=/usr/local \
     		--with-includes=/usr/local/include \
-    		--with-libraries=/usr/local/lib \
+    		--with-libraries=/usr/lib \
     # these make our image abnormally large (at least 100MB larger), which seems uncouth for an "Alpine" (ie, "small") variant :)
     #		--with-krb5 \
     #		--with-gssapi \
@@ -149,7 +149,7 @@ RUN mkdir -p "$PGDATA" && chown -R postgres:postgres "$PGDATA" && chmod 777 "$PG
 VOLUME /var/lib/postgresql/data
 
 COPY docker-entrypoint.sh /usr/local/bin/
-RUN ln -s usr/local/bin/docker-entrypoint.sh / # backwards compat
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh && ln -s usr/local/bin/docker-entrypoint.sh / # backwards compat
 ENTRYPOINT ["docker-entrypoint.sh"]
 
 EXPOSE 15432
