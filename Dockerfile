@@ -1,9 +1,9 @@
 FROM python:3.7.1-slim-stretch
-ARG VERSION=0.1.1
+ARG VERSION=0.1.1-2
 
 LABEL maintainer="lding@sequoiacap.com" \
       org.label-schema.name="pgYoga" \
-      org.label-schema.description="PostgreSQL Dist Version"
+      org.label-schema.description="PostgreSQL Dist Version" \
       org.label-schema.vcs-url="https://github.com/sequoia-china/pgyoga" \
       org.label-schema.vendor="Sequoia Capital China Data Team" \
       org.label-schema.version=${VERSION} \
