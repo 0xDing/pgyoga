@@ -1,9 +1,18 @@
 FROM python:3.7.1-slim-stretch
+ARG VERSION=0.1.1
+
+LABEL maintainer="lding@sequoiacap.com" \
+      org.label-schema.name="pgYoga" \
+      org.label-schema.description="PostgreSQL Dist Version"
+      org.label-schema.vcs-url="https://github.com/sequoia-china/pgyoga" \
+      org.label-schema.vendor="Sequoia Capital China Data Team" \
+      org.label-schema.version=${VERSION} \
+      org.label-schema.schema-version="1.0"
 
 # https://github.com/tianon/gosu/releases
 ENV GOSU_VERSION 1.11
 ENV PG_VERSION 11.1
-ENV PGYOGA_VERSION 0.1
+ENV PGYOGA_VERSION ${VERSION}
 ENV PG_SHA256 90815e812874831e9a4bf6e1136bf73bc2c5a0464ef142e2dfea40cda206db08
 RUN set -ex; \
     echo "deb http://deb.debian.org/debian stretch-backports main" >> /etc/apt/sources.list; \
@@ -95,7 +104,7 @@ RUN set -ex; \
     # https://anonscm.debian.org/cgit/pkg-postgresql/postgresql.git/tree/debian/rules?h=9.5
     	&& ./configure \
     		--build="$gnuArch" \
-    		--with-extra-version="(pgYoga $PGYOGA_VERSION)" \
+    		--with-extra-version="(Sequoia Capital China pgYoga $PGYOGA_VERSION)" \
     		--with-llvm \
     		--with-segsize=4 \
     # https://github.com/greenplum-db/gpdb/blob/bd9ddf388d15f57fef948b4a7d1ce374e0e67e64/configure.in
@@ -143,7 +152,8 @@ RUN set -ex; \
 RUN ln -s /usr/local/lib/libpq.so.5 /usr/lib/libpq.so.5
 
 # make the sample config easier to munge (and "correct by default")
-RUN sed -ri "s!^#?(listen_addresses)\s*=\s*\S+.*!\1 = '*'!" /usr/local/share/postgresql/postgresql.conf.sample
+RUN  rm -rf /usr/local/share/postgresql/postgresql.conf.sample
+COPY postgresql.conf /usr/local/share/postgresql/postgresql.conf.sample
 
 RUN mkdir -p /var/run/postgresql && chown -R postgres:postgres /var/run/postgresql && chmod 2777 /var/run/postgresql
 
