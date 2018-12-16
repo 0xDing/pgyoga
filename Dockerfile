@@ -115,7 +115,7 @@ RUN set -ex; \
     		--with-system-tzdata=/usr/share/zoneinfo \
     		--prefix=/usr/local \
     		--with-includes=/usr/local/include \
-    		--with-libraries=/usr/lib \
+    		--with-libraries=/usr/local/lib \
     # these make our image abnormally large (at least 100MB larger), which seems uncouth for an "Alpine" (ie, "small") variant :)
     #		--with-krb5 \
     #		--with-gssapi \
@@ -138,6 +138,9 @@ RUN set -ex; \
     		/usr/local/share/doc \
     		/usr/local/share/man \
     	&& find /usr/local -name '*.a' -delete
+
+# libpq.so.5: cannot open shared object file: No such file or directory
+RUN ln -s /usr/local/lib/libpq.so.5 /usr/lib/libpq.so.5
 
 # make the sample config easier to munge (and "correct by default")
 RUN sed -ri "s!^#?(listen_addresses)\s*=\s*\S+.*!\1 = '*'!" /usr/local/share/postgresql/postgresql.conf.sample
